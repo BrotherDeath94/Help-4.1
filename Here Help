@@ -1,0 +1,165 @@
+#include <stdio.h>   // Include to use printf
+#include <string.h>  // Include to use strcpy
+#include <stdlib.h>  // Include to use malloc
+
+struct list_item{ // Define Structure of List-Elements
+    int id;
+    char label[16];
+    struct list_item* next;
+};
+
+struct list_item* front = NULL; // Pointer to Start of List
+struct list_item* back = NULL;  // Pointer to End of List
+
+int nextId = 1; // Globaler Zähler für die nächste ID
+
+
+int appendItem(char* text){     // Add Element to List
+    int nummer = nextId;
+    struct list_item* item = malloc(sizeof(struct list_item));
+    item->id = nummer;
+    if(strlen(text) < 16){
+        strcpy(item->label, text);
+    } else{
+        strncpy(item->label, text, 15);
+        item->label[15] = '\0';
+    }
+    if(front == NULL){
+        front = item;
+    } 
+    if(back == NULL){
+        back = item;
+    } else {
+        back->next = item;
+        back = item;
+    }
+    nextId++;
+    return nummer;
+}
+
+void printList(){       //Print List 
+    if(front == NULL){
+        printf("empty");
+        return;
+    } else{
+        if(front->next == NULL){
+            printf("%d: %s", front->id, front->label);
+            return;
+        } else {
+            struct list_item* toprint = front;
+            while(toprint != NULL){
+                printf("%d: %s\n", toprint->id, toprint->label);
+                if(toprint->next == NULL){
+                    return;
+                } else{
+                    toprint = toprint->next;
+                }
+            }
+        }
+    }
+}
+
+struct list_item* findItem(int lid){ // Seek Element in List.
+    if(front != NULL){
+        struct list_item* lost = front;
+        while(lost != NULL){
+            if(lost->id == lid){
+                return lost;
+            } else { 
+                lost = lost->next;
+            }
+        }
+        return NULL;
+    } else {
+        return NULL; 
+    }
+}
+
+void deleteItem(int did){           // Delete Element in List
+    if(findItem(did) == front){     // Element to delete is Front Element
+        struct list_item* delete = front;
+        front = front->next;
+        free(delete);
+        return;
+    } else {                        // Element to delete isn't Front Element
+        
+        if(findItem(did) != NULL){
+            struct list_item* delete = findItem(did);
+            struct list_item* tempdelete = front;
+            
+            while(tempdelete->next != delete){
+                tempdelete = tempdelete->next;
+            }
+            if(delete != back){
+               tempdelete->next = delete->next; 
+            } else {
+                back = tempdelete;
+            }
+            free(delete);
+            return;
+        }
+    }
+    return;
+}
+
+void deleteList(){                  // Delete List
+    if(front != NULL){
+    while(front->next != NULL){
+    struct list_item* delete = front;
+    front = front->next;
+    free(delete);
+    }
+    }
+    return;
+}
+
+void printItem(struct list_item* item){ // Print Single Item
+    if(item != NULL){
+        printf("%s" , item->label);
+        
+    } else {
+        printf("NULL");
+    }
+    printf("\n");
+    return;
+}
+
+
+int main()
+{
+	int id1, id2, id3, id4, id5;
+
+	id1 = appendItem("item_1");
+	id2 = appendItem("item_2");
+	id3 = appendItem("item_3");
+	printList();
+
+	deleteItem(id1);
+	printList();
+	deleteItem(id3);
+	printList();
+	deleteItem(id1);
+	printList();
+
+	id4 = appendItem("item_4");
+	id5 = appendItem("item_5");
+	printList();
+
+	deleteItem(id5);
+	printList();
+	deleteItem(id4);
+	printList();
+	deleteItem(id2);
+	printList();
+
+	appendItem("gizmo");
+	appendItem("bar");
+	appendItem("bar");
+	appendItem("foo");
+	printList();
+	deleteList();
+	printList();
+
+	return 0;
+}
+
