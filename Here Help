@@ -90,11 +90,7 @@ void deleteItem(int did){           // Delete Element in List
             while(tempdelete->next != delete){
                 tempdelete = tempdelete->next;
             }
-            if(delete != back){
-               tempdelete->next = delete->next; 
-            } else {
-                back = tempdelete;
-            }
+            tempdelete->next = delete->next; 
             free(delete);
             return;
         }
