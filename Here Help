@@ -1,11 +1,3 @@
-/******************************************************************************
-
-                            Online C Compiler.
-                Code, Compile, Run and Debug C program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <stdio.h>   // Include to use printf
 #include <string.h>  // Include to use strcpy
 #include <stdlib.h>  // Include to use malloc
@@ -40,7 +32,6 @@ int appendItem(char* text){     // Add Element to List
     } else {
         back->next = item;
         back = item;
-        back->next = NULL;
     }
     nextId++;
     return nummer;
@@ -91,16 +82,13 @@ void deleteItem(int did){           // Delete Element in List
             while(tempdelete->next != delete){
                 tempdelete = tempdelete->next;
             }
-            if(back != delete){
-                tempdelete->next = delete->next; 
-                free(delete);
-                return;
+            if(delete != back){
+               tempdelete->next = delete->next; 
             } else {
                 back = tempdelete;
-                back->next = NULL;
-                free(delete);
-                return;
             }
+            free(delete);
+            return;
         }
     }
     return;
@@ -113,6 +101,8 @@ void deleteList(){                  // Delete List
     front = front->next;
     free(delete);
     }
+    struct list_item* delete = front;
+    free(delete);
     }
     return;
 }
@@ -131,39 +121,45 @@ void printItem(struct list_item* item){ // Print Single Item
 
 int main()
 {
-	int id1, id2, id3, id4, id5;
+	int id1 = appendItem("item_1");
+int id2 = appendItem("item_2");
+int id3 = appendItem("item_3");
 
-	id1 = appendItem("item_1");
-	id2 = appendItem("item_2");
-	id3 = appendItem("item_3");
-	printList();
+printItem(findItem(id1));
+printItem(findItem(id2));
+printItem(findItem(id3));
+printf("\n");
 
-	deleteItem(id1);
-	printList();
-	deleteItem(id3);
-	printList();
-	deleteItem(id1);
-	printList();
+deleteList();
 
-	id4 = appendItem("item_4");
-	id5 = appendItem("item_5");
-	printList();
+printItem(findItem(id1));
+printItem(findItem(id2));
+printItem(findItem(id3));
+printf("\n");
 
-	deleteItem(id5);
-	printList();
-	deleteItem(id4);
-	printList();
-	deleteItem(id2);
-	printList();
+int id4 = appendItem("item_4");
+int id5 = appendItem("item_5");
+int id6 = appendItem("item_6");
 
-	appendItem("gizmo");
-	appendItem("bar");
-	appendItem("bar");
-	appendItem("foo");
-	printList();
-	deleteList();
-	printList();
+
+printItem(findItem(id4));
+printItem(findItem(id5));
+printItem(findItem(id6));
+printf("\n");
+
+deleteList();
+
+printItem(findItem(id1));
+printItem(findItem(id2));
+printItem(findItem(id3));
+printItem(findItem(id4));
+printItem(findItem(id5));
+printItem(findItem(id6));
+printf("\n");
 
 	return 0;
+}
+
+
 }
 
