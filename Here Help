@@ -1,3 +1,11 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
 #include <stdio.h>   // Include to use printf
 #include <string.h>  // Include to use strcpy
 #include <stdlib.h>  // Include to use malloc
@@ -32,31 +40,24 @@ int appendItem(char* text){     // Add Element to List
     } else {
         back->next = item;
         back = item;
+        back->next = NULL;
     }
     nextId++;
     return nummer;
 }
 
 void printList(){       //Print List 
-    if(front == NULL){
-        printf("empty");
-        return;
-    } else{
-        if(front->next == NULL){
-            printf("%d: %s", front->id, front->label);
-            return;
-        } else {
-            struct list_item* toprint = front;
-            while(toprint != NULL){
-                printf("%d: %s\n", toprint->id, toprint->label);
-                if(toprint->next == NULL){
-                    return;
-                } else{
-                    toprint = toprint->next;
-                }
-            }
+    if(front != NULL){
+        struct list_item* item = front;
+        while(item != NULL){
+            printf("%d: %s\n", item->id, item->label);
+            item = item->next;
         }
+        printf("\n");
+    } else {
+        printf("empty\n\n");
     }
+    return;
 }
 
 struct list_item* findItem(int lid){ // Seek Element in List.
@@ -90,9 +91,16 @@ void deleteItem(int did){           // Delete Element in List
             while(tempdelete->next != delete){
                 tempdelete = tempdelete->next;
             }
-            tempdelete->next = delete->next; 
-            free(delete);
-            return;
+            if(back != delete){
+                tempdelete->next = delete->next; 
+                free(delete);
+                return;
+            } else {
+                back = tempdelete;
+                back->next = NULL;
+                free(delete);
+                return;
+            }
         }
     }
     return;
